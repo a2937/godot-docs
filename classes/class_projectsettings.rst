@@ -1113,8 +1113,6 @@ Properties
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`int<class_int>`                             | :ref:`memory/limits/message_queue/max_size_mb<class_ProjectSettings_property_memory/limits/message_queue/max_size_mb>`                                                                                     | ``32``                                                                                           |
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-   | :ref:`int<class_int>`                             | :ref:`memory/limits/multithreaded_server/rid_pool_prealloc<class_ProjectSettings_property_memory/limits/multithreaded_server/rid_pool_prealloc>`                                                           | ``60``                                                                                           |
-   +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`float<class_float>`                         | :ref:`navigation/2d/default_cell_size<class_ProjectSettings_property_navigation/2d/default_cell_size>`                                                                                                     | ``1.0``                                                                                          |
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`float<class_float>`                         | :ref:`navigation/2d/default_edge_connection_margin<class_ProjectSettings_property_navigation/2d/default_edge_connection_margin>`                                                                           | ``1.0``                                                                                          |
@@ -1325,9 +1323,11 @@ Properties
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`bool<class_bool>`                           | :ref:`rendering/gl_compatibility/fallback_to_angle<class_ProjectSettings_property_rendering/gl_compatibility/fallback_to_angle>`                                                                           | ``true``                                                                                         |
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+   | :ref:`bool<class_bool>`                           | :ref:`rendering/gl_compatibility/fallback_to_gles<class_ProjectSettings_property_rendering/gl_compatibility/fallback_to_gles>`                                                                             | ``true``                                                                                         |
+   +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`bool<class_bool>`                           | :ref:`rendering/gl_compatibility/fallback_to_native<class_ProjectSettings_property_rendering/gl_compatibility/fallback_to_native>`                                                                         | ``true``                                                                                         |
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
-   | :ref:`Array<class_Array>`                         | :ref:`rendering/gl_compatibility/force_angle_on_devices<class_ProjectSettings_property_rendering/gl_compatibility/force_angle_on_devices>`                                                                 | ``[]``                                                                                           |
+   | :ref:`Array<class_Array>`                         | :ref:`rendering/gl_compatibility/force_angle_on_devices<class_ProjectSettings_property_rendering/gl_compatibility/force_angle_on_devices>`                                                                 |                                                                                                  |
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`int<class_int>`                             | :ref:`rendering/gl_compatibility/item_buffer_size<class_ProjectSettings_property_rendering/gl_compatibility/item_buffer_size>`                                                                             | ``16384``                                                                                        |
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
@@ -1450,6 +1450,14 @@ Properties
    | :ref:`String<class_String>`                       | :ref:`rendering/renderer/rendering_method.mobile<class_ProjectSettings_property_rendering/renderer/rendering_method.mobile>`                                                                               | ``"mobile"``                                                                                     |
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`String<class_String>`                       | :ref:`rendering/renderer/rendering_method.web<class_ProjectSettings_property_rendering/renderer/rendering_method.web>`                                                                                     | ``"gl_compatibility"``                                                                           |
+   +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+   | :ref:`int<class_int>`                             | :ref:`rendering/rendering_device/d3d12/agility_sdk_version<class_ProjectSettings_property_rendering/rendering_device/d3d12/agility_sdk_version>`                                                           | ``610``                                                                                          |
+   +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+   | :ref:`int<class_int>`                             | :ref:`rendering/rendering_device/d3d12/max_misc_descriptors_per_frame<class_ProjectSettings_property_rendering/rendering_device/d3d12/max_misc_descriptors_per_frame>`                                     | ``512``                                                                                          |
+   +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+   | :ref:`int<class_int>`                             | :ref:`rendering/rendering_device/d3d12/max_resource_descriptors_per_frame<class_ProjectSettings_property_rendering/rendering_device/d3d12/max_resource_descriptors_per_frame>`                             | ``16384``                                                                                        |
+   +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
+   | :ref:`int<class_int>`                             | :ref:`rendering/rendering_device/d3d12/max_sampler_descriptors_per_frame<class_ProjectSettings_property_rendering/rendering_device/d3d12/max_sampler_descriptors_per_frame>`                               | ``1024``                                                                                         |
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
    | :ref:`String<class_String>`                       | :ref:`rendering/rendering_device/driver<class_ProjectSettings_property_rendering/rendering_device/driver>`                                                                                                 |                                                                                                  |
    +---------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
@@ -1962,7 +1970,9 @@ Changes to this setting will only be applied upon restarting the application.
 
 :ref:`int<class_int>` **application/run/frame_delay_msec** = ``0``
 
-Forces a delay between frames in the main loop (in milliseconds). This may be useful if you plan to disable vertical synchronization.
+Forces a *constant* delay between frames in the main loop (in milliseconds). In most situations, :ref:`application/run/max_fps<class_ProjectSettings_property_application/run/max_fps>` should be preferred as an FPS limiter as it's more precise.
+
+This setting can be overridden using the ``--frame-delay <ms;>`` command line argument.
 
 .. rst-class:: classref-item-separator
 
@@ -2034,7 +2044,7 @@ If :ref:`display/window/vsync/vsync_mode<class_ProjectSettings_property_display/
 
 See also :ref:`physics/common/physics_ticks_per_second<class_ProjectSettings_property_physics/common/physics_ticks_per_second>`.
 
-This setting can be overridden using the ``--max-fps <fps;>`` command line argument (including with a value of ``0`` for unlimited framerate).
+This setting can be overridden using the ``--max-fps <fps>`` command line argument (including with a value of ``0`` for unlimited framerate).
 
 \ **Note:** This property is only read when the project starts. To change the rendering FPS cap at runtime, set :ref:`Engine.max_fps<class_Engine_property_max_fps>` instead.
 
@@ -4924,7 +4934,7 @@ Default :ref:`InputEventAction<class_InputEventAction>` to select an item in a :
 
 :ref:`Dictionary<class_Dictionary>` **input/ui_swap_input_direction**
 
-Default :ref:`InputEventAction<class_InputEventAction>` to swap input direction, i.e. change between left-to-right to right-to-left modes. Affects text-editting controls (:ref:`LineEdit<class_LineEdit>`, :ref:`TextEdit<class_TextEdit>`).
+Default :ref:`InputEventAction<class_InputEventAction>` to swap input direction, i.e. change between left-to-right to right-to-left modes. Affects text-editing controls (:ref:`LineEdit<class_LineEdit>`, :ref:`TextEdit<class_TextEdit>`).
 
 .. rst-class:: classref-item-separator
 
@@ -5326,7 +5336,7 @@ In case there's more than one caret active, removes the secondary carets and cle
 
 :ref:`Dictionary<class_Dictionary>` **input/ui_text_completion_accept**
 
-Default :ref:`InputEventAction<class_InputEventAction>` to accept an autocompetion hint.
+Default :ref:`InputEventAction<class_InputEventAction>` to accept an autocompletion hint.
 
 \ **Note:** Default ``ui_*`` actions cannot be removed as they are necessary for the internal logic of several :ref:`Control<class_Control>`\ s. The events assigned to the action can however be modified.
 
@@ -5340,7 +5350,7 @@ Default :ref:`InputEventAction<class_InputEventAction>` to accept an autocompeti
 
 :ref:`Dictionary<class_Dictionary>` **input/ui_text_completion_query**
 
-Default :ref:`InputEventAction<class_InputEventAction>` to request autocompetion.
+Default :ref:`InputEventAction<class_InputEventAction>` to request autocompletion.
 
 \ **Note:** Default ``ui_*`` actions cannot be removed as they are necessary for the internal logic of several :ref:`Control<class_Control>`\ s. The events assigned to the action can however be modified.
 
@@ -5354,7 +5364,7 @@ Default :ref:`InputEventAction<class_InputEventAction>` to request autocompetion
 
 :ref:`Dictionary<class_Dictionary>` **input/ui_text_completion_replace**
 
-Default :ref:`InputEventAction<class_InputEventAction>` to accept an autocompetion hint, replacing existing text.
+Default :ref:`InputEventAction<class_InputEventAction>` to accept an autocompletion hint, replacing existing text.
 
 \ **Note:** Default ``ui_*`` actions cannot be removed as they are necessary for the internal logic of several :ref:`Control<class_Control>`\ s. The events assigned to the action can however be modified.
 
@@ -8358,18 +8368,6 @@ Godot uses a message queue to defer some function calls. If you run out of space
 
 ----
 
-.. _class_ProjectSettings_property_memory/limits/multithreaded_server/rid_pool_prealloc:
-
-.. rst-class:: classref-property
-
-:ref:`int<class_int>` **memory/limits/multithreaded_server/rid_pool_prealloc** = ``60``
-
-This is used by servers when used in multi-threading mode (servers and visual). RIDs are preallocated to avoid stalling the server requesting them on threads. If servers get stalled too often when loading resources in a thread, increase this number.
-
-.. rst-class:: classref-item-separator
-
-----
-
 .. _class_ProjectSettings_property_navigation/2d/default_cell_size:
 
 .. rst-class:: classref-property
@@ -9118,7 +9116,7 @@ Controls how much physics ticks are synchronized with real time. For 0 or less, 
 
 :ref:`int<class_int>` **physics/common/physics_ticks_per_second** = ``60``
 
-The number of fixed iterations per second. This controls how often physics simulation and :ref:`Node._physics_process<class_Node_method__physics_process>` methods are run. See also :ref:`application/run/max_fps<class_ProjectSettings_property_application/run/max_fps>`.
+The number of fixed iterations per second. This controls how often physics simulation and :ref:`Node._physics_process<class_Node_private_method__physics_process>` methods are run. See also :ref:`application/run/max_fps<class_ProjectSettings_property_application/run/max_fps>`.
 
 \ **Note:** This property is only read when the project starts. To change the physics FPS at runtime, set :ref:`Engine.physics_ticks_per_second<class_Engine_property_physics_ticks_per_second>` instead.
 
@@ -9776,6 +9774,20 @@ If ``true``, the compatibility renderer will fall back to ANGLE if native OpenGL
 
 ----
 
+.. _class_ProjectSettings_property_rendering/gl_compatibility/fallback_to_gles:
+
+.. rst-class:: classref-property
+
+:ref:`bool<class_bool>` **rendering/gl_compatibility/fallback_to_gles** = ``true``
+
+If ``true``, the compatibility renderer will fall back to OpenGLES if desktop OpenGL is not supported.
+
+\ **Note:** This setting is implemented only on Linux/X11.
+
+.. rst-class:: classref-item-separator
+
+----
+
 .. _class_ProjectSettings_property_rendering/gl_compatibility/fallback_to_native:
 
 .. rst-class:: classref-property
@@ -9794,7 +9806,7 @@ If ``true``, the compatibility renderer will fall back to native OpenGL if ANGLE
 
 .. rst-class:: classref-property
 
-:ref:`Array<class_Array>` **rendering/gl_compatibility/force_angle_on_devices** = ``[]``
+:ref:`Array<class_Array>` **rendering/gl_compatibility/force_angle_on_devices**
 
 An :ref:`Array<class_Array>` of devices which should always use the ANGLE renderer.
 
@@ -10610,6 +10622,60 @@ Override for :ref:`rendering/renderer/rendering_method<class_ProjectSettings_pro
 
 ----
 
+.. _class_ProjectSettings_property_rendering/rendering_device/d3d12/agility_sdk_version:
+
+.. rst-class:: classref-property
+
+:ref:`int<class_int>` **rendering/rendering_device/d3d12/agility_sdk_version** = ``610``
+
+Version code of the Direct3D 12 Agility SDK to use (``D3D12SDKVersion``).
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_ProjectSettings_property_rendering/rendering_device/d3d12/max_misc_descriptors_per_frame:
+
+.. rst-class:: classref-property
+
+:ref:`int<class_int>` **rendering/rendering_device/d3d12/max_misc_descriptors_per_frame** = ``512``
+
+The number of entries in the miscellaneous descriptors heap the Direct3D 12 rendering driver uses each frame, used for various operations like clearing a texture.
+
+Depending on the complexity of scenes, this value may be lowered or may need to be raised.
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_ProjectSettings_property_rendering/rendering_device/d3d12/max_resource_descriptors_per_frame:
+
+.. rst-class:: classref-property
+
+:ref:`int<class_int>` **rendering/rendering_device/d3d12/max_resource_descriptors_per_frame** = ``16384``
+
+The number of entries in the resource descriptors heap the Direct3D 12 rendering driver uses each frame, used for most rendering operations.
+
+Depending on the complexity of scenes, this value may be lowered or may need to be raised.
+
+.. rst-class:: classref-item-separator
+
+----
+
+.. _class_ProjectSettings_property_rendering/rendering_device/d3d12/max_sampler_descriptors_per_frame:
+
+.. rst-class:: classref-property
+
+:ref:`int<class_int>` **rendering/rendering_device/d3d12/max_sampler_descriptors_per_frame** = ``1024``
+
+The number of entries in the sampler descriptors heap the Direct3D 12 rendering driver uses each frame, used for most rendering operations.
+
+Depending on the complexity of scenes, this value may be lowered or may need to be raised.
+
+.. rst-class:: classref-item-separator
+
+----
+
 .. _class_ProjectSettings_property_rendering/rendering_device/driver:
 
 .. rst-class:: classref-property
@@ -10974,8 +11040,6 @@ Enabling temporal antialiasing (:ref:`rendering/anti_aliasing/quality/use_taa<cl
 
 \ **Note:** If :ref:`rendering/scaling_3d/scale<class_ProjectSettings_property_rendering/scaling_3d/scale>` is lower than ``1.0`` (exclusive), :ref:`rendering/textures/default_filters/texture_mipmap_bias<class_ProjectSettings_property_rendering/textures/default_filters/texture_mipmap_bias>` is used to adjust the automatic mipmap bias which is calculated internally based on the scale factor. The formula for this is ``log2(scaling_3d_scale) + mipmap_bias``.
 
-\ **Note:** This property is only read when the project starts. To change the mipmap LOD bias at run-time, set :ref:`Viewport.texture_mipmap_bias<class_Viewport_property_texture_mipmap_bias>` instead.
-
 .. rst-class:: classref-item-separator
 
 ----
@@ -11257,6 +11321,8 @@ Specify whether OpenXR should be configured for an HMD or a hand held device.
 
 If true and foveation is supported, will automatically adjust foveation level based on framerate up to the level set on :ref:`xr/openxr/foveation_level<class_ProjectSettings_property_xr/openxr/foveation_level>`.
 
+\ **Note:** Only works on compatibility renderer.
+
 .. rst-class:: classref-item-separator
 
 ----
@@ -11268,6 +11334,8 @@ If true and foveation is supported, will automatically adjust foveation level ba
 :ref:`int<class_int>` **xr/openxr/foveation_level** = ``"0"``
 
 Applied foveation level if supported: 0 = off, 1 = low, 2 = medium, 3 = high.
+
+\ **Note:** Only works on compatibility renderer.
 
 .. rst-class:: classref-item-separator
 
