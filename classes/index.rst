@@ -578,6 +578,7 @@ Resources
     class_visualshadernodecolorfunc
     class_visualshadernodecolorop
     class_visualshadernodecolorparameter
+    class_visualshadernodecomment
     class_visualshadernodecompare
     class_visualshadernodeconstant
     class_visualshadernodecubemap
@@ -627,6 +628,7 @@ Resources
     class_visualshadernodeproximityfade
     class_visualshadernoderandomrange
     class_visualshadernoderemap
+    class_visualshadernodereroute
     class_visualshadernoderesizablebase
     class_visualshadernoderotationbyaxis
     class_visualshadernodesample3d
@@ -699,6 +701,8 @@ Other objects
     class_astargrid2d
     class_audioeffectinstance
     class_audioeffectspectrumanalyzerinstance
+    class_audiosample
+    class_audiosampleplayback
     class_audioserver
     class_audiostreamgeneratorplayback
     class_audiostreamplayback
@@ -765,7 +769,6 @@ Other objects
     class_gdextensionmanager
     class_geometry2d
     class_geometry3d
-    class_godotsharp
     class_hashingcontext
     class_hmaccontext
     class_httpclient
@@ -952,6 +955,7 @@ Other objects
     class_workerthreadpool
     class_xmlparser
     class_xrbodytracker
+    class_xrcontrollertracker
     class_xrfacetracker
     class_xrhandtracker
     class_xrinterface
@@ -959,6 +963,8 @@ Other objects
     class_xrpose
     class_xrpositionaltracker
     class_xrserver
+    class_xrtracker
+    class_xrvrs
     class_zippacker
     class_zipreader
 
@@ -1049,6 +1055,7 @@ Variant types
     class_packedstringarray
     class_packedvector2array
     class_packedvector3array
+    class_packedvector4array
     class_plane
     class_projection
     class_quaternion
