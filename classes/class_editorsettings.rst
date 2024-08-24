@@ -337,6 +337,8 @@ Properties
    +---------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
    | :ref:`bool<class_bool>`                           | :ref:`interface/editor/expand_to_title<class_EditorSettings_property_interface/editor/expand_to_title>`                                                                                                           |
    +---------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+   | :ref:`bool<class_bool>`                           | :ref:`interface/editor/font_allow_msdf<class_EditorSettings_property_interface/editor/font_allow_msdf>`                                                                                                           |
+   +---------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
    | :ref:`int<class_int>`                             | :ref:`interface/editor/font_antialiasing<class_EditorSettings_property_interface/editor/font_antialiasing>`                                                                                                       |
    +---------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
    | :ref:`bool<class_bool>`                           | :ref:`interface/editor/font_disable_embedded_bitmaps<class_EditorSettings_property_interface/editor/font_disable_embedded_bitmaps>`                                                                               |
@@ -1289,7 +1291,7 @@ The grid size in units. Higher values prevent the grid from appearing "cut off" 
 
 :ref:`bool<class_bool>` **editors/3d/grid_xy_plane** :ref:`🔗<class_EditorSettings_property_editors/3d/grid_xy_plane>`
 
-If ``true``, render the grid on an XY plane. This can be useful for 3D side-scrolling games.
+If ``true``, renders the grid on the XY plane in perspective view. This can be useful for 3D side-scrolling games.
 
 .. rst-class:: classref-item-separator
 
@@ -1301,7 +1303,7 @@ If ``true``, render the grid on an XY plane. This can be useful for 3D side-scro
 
 :ref:`bool<class_bool>` **editors/3d/grid_xz_plane** :ref:`🔗<class_EditorSettings_property_editors/3d/grid_xz_plane>`
 
-If ``true``, render the grid on an XZ plane.
+If ``true``, renders the grid on the XZ plane in perspective view.
 
 .. rst-class:: classref-item-separator
 
@@ -1313,7 +1315,7 @@ If ``true``, render the grid on an XZ plane.
 
 :ref:`bool<class_bool>` **editors/3d/grid_yz_plane** :ref:`🔗<class_EditorSettings_property_editors/3d/grid_yz_plane>`
 
-If ``true``, render the grid on a YZ plane. This can be useful for 3D side-scrolling games.
+If ``true``, renders the grid on the YZ plane in perspective view. This can be useful for 3D side-scrolling games.
 
 .. rst-class:: classref-item-separator
 
@@ -2575,6 +2577,18 @@ Specific to the macOS platform.
 
 ----
 
+.. _class_EditorSettings_property_interface/editor/font_allow_msdf:
+
+.. rst-class:: classref-property
+
+:ref:`bool<class_bool>` **interface/editor/font_allow_msdf** :ref:`🔗<class_EditorSettings_property_interface/editor/font_allow_msdf>`
+
+If set to ``true``, MSDF font rendering will be used for the visual shader graph editor. You may need to set this to ``false`` when using a custom main font, as some fonts will look broken due to the use of self-intersecting outlines in their font data. Downloading the font from the font maker's official website as opposed to a service like Google Fonts can help resolve this issue.
+
+.. rst-class:: classref-item-separator
+
+----
+
 .. _class_EditorSettings_property_interface/editor/font_antialiasing:
 
 .. rst-class:: classref-property
@@ -2807,7 +2821,9 @@ The default **Auto** value will only enable this if the editor was compiled with
 
 :ref:`bool<class_bool>` **interface/editor/single_window_mode** :ref:`🔗<class_EditorSettings_property_interface/editor/single_window_mode>`
 
-If ``true``, embed modal windows such as docks inside the main editor window. When single-window mode is enabled, tooltips will also be embedded inside the main editor window, which means they can't be displayed outside of the editor window.
+If ``true``, embed modal windows such as docks inside the main editor window. When single-window mode is enabled, tooltips will also be embedded inside the main editor window, which means they can't be displayed outside of the editor window. Single-window mode can be faster as it does not need to create a separate window for every popup and tooltip, which can be a slow operation depending on the operating system and rendering method in use.
+
+This is equivalent to :ref:`ProjectSettings.display/window/subwindows/embed_subwindows<class_ProjectSettings_property_display/window/subwindows/embed_subwindows>` in the running project, except the setting's value is inverted.
 
 \ **Note:** To query whether the editor can use multiple windows in an editor plugin, use :ref:`EditorInterface.is_multi_window_enabled<class_EditorInterface_method_is_multi_window_enabled>` instead of querying the value of this editor setting.
 
